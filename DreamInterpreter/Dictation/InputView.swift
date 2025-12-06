@@ -13,6 +13,8 @@ struct InputView: View {
     @FocusState private var isFocused
     private var cornerRadius: CGFloat = 24
     
+    @Namespace private var buttonAnimation
+    
     let completion: (String) -> Void
     
     init(completion: @escaping (String) -> Void) {
@@ -21,6 +23,7 @@ struct InputView: View {
     
     var body: some View {
         VStack(spacing: 16) {
+            // MARK: - Text Field
             TextField("Describe your dream", text: $dreamText, axis: .vertical)
                 .focused($isFocused)
                 .textFieldStyle(.plain)
@@ -28,66 +31,89 @@ struct InputView: View {
                 .textInputAutocapitalization(.sentences)
                 .disableAutocorrection(false)
                 .submitLabel(.done)
-                .scrollDismissesKeyboard(.automatic)
             
-            HStack {
-                Button {
-                    if speech.isRecording {
-                        speech.stop()
-                    } else {
-                        Task {
-                            if !speech.isAuthorized {
-                                await speech.requestAuthorization()
-                            }
-                            try? speech.start { transcript in
-                                self.dreamText = transcript
-                            }
+            // MARK: - Buttons
+            HStack(spacing: 16) {
+                Image(systemName: speech.isRecording ? "mic.fill" : "mic")
+                    .foregroundStyle(speech.isRecording ? .white : .primary)
+                    .padding(8)
+                    .glassEffect(speech.isRecording ? .regular.tint(.red).interactive() : .regular.interactive(), in: .circle)
+                    .onTapGesture {
+                        if speech.isRecording {
+                            speech.stop()
+                        } else {
+                            startTranscribing()
                         }
                     }
-                } label: {
-                    Image(systemName: speech.isRecording ? "mic.fill" : "mic")
-                        .tint(Color(.systemBackground))
-                        .padding(8)
-                        .background {
-                            Circle()
-                                .foregroundStyle(speech.isRecording ? .red : .primary)
-                        }
-                }
                 
                 Spacer()
                 
-                if !dreamText.isEmpty {
-                    Button {
-                        dreamText = ""
-                    } label: {
-                        Image(systemName: "xmark")
-                            .tint(Color(.systemBackground))
+                HStack(spacing: 8) {
+                    if isFocused {
+                        Image(systemName: "keyboard.chevron.compact.down")
+                            .foregroundStyle(.primary)
                             .padding(8)
-                            .background { Circle().foregroundStyle(.primary) }
+                            .glassEffect(.regular.interactive(), in: .circle)
+                            .transition(
+                                .asymmetric(
+                                    insertion: .offset(x: -20).combined(with: .opacity).combined(with: .scale),
+                                    removal: .offset(x: 20).combined(with: .opacity).combined(with: .scale)
+                                )
+                            )
+                            .onTapGesture {
+                                isFocused = false
+                            }
                     }
-                }
-                
-                Button {
-                    if speech.isRecording {
-                        speech.stop()
+                    
+                    if !dreamText.isEmpty {
+                        Image(systemName: "xmark")
+                            .foregroundStyle(.primary)
+                            .padding(8)
+                            .glassEffect(.regular.interactive(), in: .circle)
+                            .transition(
+                                .asymmetric(
+                                    insertion: .offset(x: -20).combined(with: .opacity).combined(with: .scale),
+                                    removal: .offset(x: 20).combined(with: .opacity).combined(with: .scale)
+                                )
+                            )
+                            .onTapGesture {
+                                dreamText = ""
+                                speech.stop()
+                            }
                     }
-                    completion(dreamText)
-                    dreamText = ""
-                    isFocused = false
-                } label: {
+                    
                     Image(systemName: "arrow.up")
-                        .tint(Color(.systemBackground))
+                        .foregroundStyle(dreamText.isEmpty ? .secondary : .primary)
                         .padding(8)
-                        .background {
-                            Circle()
-                                .foregroundStyle(dreamText.isEmpty ? .secondary : .primary)
+                        .glassEffect(.regular.interactive(), in: .circle)
+                        .disabled(dreamText.isEmpty)
+                        .onTapGesture {
+                            if !dreamText.isEmpty {
+                                let text = dreamText
+                                withAnimation(.snappy) {
+                                    dreamText = ""
+                                    isFocused = false
+                                }
+                                completion(text)
+                            }
                         }
                 }
-                .disabled(dreamText.isEmpty)
             }
+            .animation(.spring(response: 0.4, dampingFraction: 0.6), value: dreamText)
         }
         .padding(8)
         .glassEffect(.regular.tint(Color(.systemBackground).opacity(0.35)), in: .rect(cornerRadius: cornerRadius))
+    }
+    
+    private func startTranscribing() {
+        Task {
+            if !speech.isAuthorized {
+                await speech.requestAuthorization()
+            }
+            try? speech.start { transcript in
+                self.dreamText = transcript
+            }
+        }
     }
 }
 

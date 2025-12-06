@@ -52,7 +52,7 @@ final class SpeechDictationManager: NSObject, ObservableObject {
         try audioEngine.start()
 
         task = speechRecognizer?.recognitionTask(with: request!) { result, error in
-            if let result = result {
+            if let result {
                 DispatchQueue.main.async {
                     transcriptionHandler(result.bestTranscription.formattedString)
                 }
