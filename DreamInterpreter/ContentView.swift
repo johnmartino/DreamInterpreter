@@ -6,24 +6,50 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ContentView: View {
+    @Environment(\.modelContext) var context
     @StateObject private var service = AIService()
     @StateObject private var viewModel = ContentViewModel()
+    @Query private var interpretations: [DreamInterpretation]
+    
+    @State private var showDreamHistory = false
     
     var body: some View {
         NavigationStack {
             contentView
-                .navigationTitle("Dream Interpreter")
+                .navigationTitle("Reve AI")
                 .toolbarTitleDisplayMode(.inlineLarge)
                 .toolbar {
-                    ToolbarItem(placement: .primaryAction) {
-                        Button {
-                            viewModel.dream = nil
-                        } label: {
-                            Image(systemName: "eraser")
+                    ToolbarItemGroup(placement: .primaryAction) {
+                        if let dream = viewModel.dream {
+                            Button {
+                                viewModel.dream = nil
+                            } label: {
+                                Image(systemName: "eraser")
+                            }
+                            
+                            Button {
+                                let interpretation = DreamInterpretation(description: viewModel.latestDreamText, dream: dream)
+                                context.insert(interpretation)
+                                try? context.save()
+                            } label: {
+                                Image(systemName: "square.and.arrow.down")
+                            }
+                        }
+                        
+                        if interpretations.count > 0 {
+                            Button {
+                                showDreamHistory.toggle()
+                            } label: {
+                                Image(systemName: "list.bullet")
+                            }
                         }
                     }
+                }
+                .fullScreenCover(isPresented: $showDreamHistory) {
+                    DreamListView()
                 }
         }
     }
@@ -59,28 +85,7 @@ struct ContentView: View {
     
     @ViewBuilder private func detailsView(dream: Dream) -> some View {
         ScrollView(.vertical, showsIndicators: false) {
-            VStack(alignment: .leading, spacing: 16) {
-                Text(dream.title).font(.headline)
-                
-                VStack(alignment: .leading) {
-                    Text("Summary").font(.caption).bold().foregroundStyle(.secondary)
-                    Text(dream.summary)
-                }
-                
-                ForEach(dream.archetypes) { archetype in
-                    VStack(alignment: .leading) {
-                        Text(archetype.name).font(.caption).bold().foregroundStyle(.secondary)
-                        Text(archetype.dreamCounterpart)
-                    }
-                }
-                
-                VStack(alignment: .leading) {
-                    Text("Interpretation").font(.caption).bold().foregroundStyle(.secondary)
-                    Text(dream.description)
-                }
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal)
+            DreamView(dream: dream)
         }
     }
     

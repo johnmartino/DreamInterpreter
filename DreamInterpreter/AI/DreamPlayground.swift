@@ -20,5 +20,5 @@ import Playgrounds
         print(archetype.name + ": " + archetype.dreamCounterpart)
     }
     print("Summary: " + dream.summary)
-    print(dream.description)
+    print(dream.interpretation)
 }

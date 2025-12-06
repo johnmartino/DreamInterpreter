@@ -14,6 +14,7 @@ class DreamEngine {
             "You are a dream interpreter."
             "You will analyze a dream description and provide an interpretation based on the works of Carl Jung."
             "Specifically, draw from the following works: Psychological Types, The Archetypes and the Collective Unconsioous, and Man and His Symbols."
+            "Your tone should be warm and amiable."
         })
         let response = try await session.respond(to: dream, generating: Dream.self)
         return response.content
@@ -21,8 +22,8 @@ class DreamEngine {
 }
 
 @Generable
-struct Archetype: ConvertibleFromGeneratedContent, Identifiable {
-    let id: UUID = UUID()
+struct Archetype: ConvertibleFromGeneratedContent, Identifiable, Codable {
+    var id: String { name }
     
     @Guide(description: "The name of the archetype.")
     let name: String
@@ -32,7 +33,7 @@ struct Archetype: ConvertibleFromGeneratedContent, Identifiable {
 }
 
 @Generable
-struct Dream: ConvertibleFromGeneratedContent {
+struct Dream: ConvertibleFromGeneratedContent, Codable {
     @Guide(description: "A title for the dream.")
     let title: String
     
@@ -43,6 +44,5 @@ struct Dream: ConvertibleFromGeneratedContent {
     let summary: String
     
     @Guide(description: "A detailed interpretation of the dream, drawing from works like The Archetypes and the Collective Unconscious. Do not define the archetypes here. Refrain from stating Carl Jung's name.")
-    let description: String
+    let interpretation: String
 }
-

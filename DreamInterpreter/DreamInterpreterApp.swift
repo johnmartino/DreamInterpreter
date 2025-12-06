@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct DreamInterpreterApp: App {
@@ -13,5 +14,6 @@ struct DreamInterpreterApp: App {
         WindowGroup {
             ContentView()
         }
+        .modelContainer(for: [DreamInterpretation.self])
     }
 }

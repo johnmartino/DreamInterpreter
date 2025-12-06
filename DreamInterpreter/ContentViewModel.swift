@@ -14,8 +14,10 @@ class ContentViewModel: ObservableObject {
     @Published var dream: Dream?
     @Published var errorMessage: String?
     @Published var isQuerying = false
+    @Published var latestDreamText = ""
     
     @MainActor func interpret(dreamText: String) async {
+        latestDreamText = dreamText
         do {
             isQuerying = true
             dream = try await engine.interpret(dream: dreamText)

@@ -56,6 +56,17 @@ struct InputView: View {
                 
                 Spacer()
                 
+                if !dreamText.isEmpty {
+                    Button {
+                        dreamText = ""
+                    } label: {
+                        Image(systemName: "xmark")
+                            .tint(Color(.systemBackground))
+                            .padding(8)
+                            .background { Circle().foregroundStyle(.primary) }
+                    }
+                }
+                
                 Button {
                     if speech.isRecording {
                         speech.stop()
