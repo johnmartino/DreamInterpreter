@@ -8,14 +8,77 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject private var service = AIService()
+    @StateObject private var viewModel = ContentViewModel()
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationStack {
+            contentView
+                .navigationTitle("Dream Interpreter")
+                .toolbarTitleDisplayMode(.inlineLarge)
         }
-        .padding()
+    }
+    
+    @ViewBuilder private var contentView: some View {
+        let (isAvailable, reason) = service.isAvailable()
+        if !isAvailable {
+            ContentUnavailableView("Language Model", systemImage: "apple.intelligence", description: Text(reason ?? "Unexpected error occurred."))
+        } else {
+            interpretationView
+                .safeAreaInset(edge: .bottom) {
+                    InputView(borderColor: .gray) { text in send(text) }
+                        .disabled(viewModel.isQuerying)
+                        .padding(8)
+                }
+        }
+    }
+    
+    @ViewBuilder private var interpretationView: some View {
+        if viewModel.isQuerying {
+            ProgressView("Interpreting your dream...")
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+        } else if let message = viewModel.errorMessage {
+            ContentUnavailableView(message, systemImage: "apple.intelligence")
+        } else {
+            detailsView
+        }
+    }
+    
+    @ViewBuilder private var detailsView: some View {
+        ScrollView(.vertical, showsIndicators: false) {
+            VStack(alignment: .leading, spacing: 16) {
+                if let summary = viewModel.dream?.summary {
+                    VStack(alignment: .leading) {
+                        Text("Summary").font(.caption).bold()
+                        Text(summary).foregroundStyle(Color(.darkGray))
+                    }
+                }
+                
+                if let archetypes = viewModel.dream?.archetypes {
+                    ForEach(archetypes) { archetype in
+                        VStack(alignment: .leading) {
+                            Text(archetype.name).font(.caption).bold()
+                            Text(archetype.dreamCounterpart).foregroundStyle(Color(.darkGray))
+                        }
+                    }
+                }
+                
+                if let interpretation = viewModel.dream?.description {
+                    VStack(alignment: .leading) {
+                        Text("Interpretation").font(.caption).bold()
+                        Text(interpretation).foregroundStyle(Color(.darkGray))
+                    }
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal)
+        }
+    }
+    
+    private func send(_ text: String) {
+        Task {
+            await viewModel.interpret(dreamText: text)
+        }
     }
 }
 
