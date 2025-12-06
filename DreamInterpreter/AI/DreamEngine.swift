@@ -33,13 +33,16 @@ struct Archetype: ConvertibleFromGeneratedContent, Identifiable {
 
 @Generable
 struct Dream: ConvertibleFromGeneratedContent {
+    @Guide(description: "A title for the dream.")
+    let title: String
+    
     @Guide(description: "A list of archetype symbols and their dream counterparts.")
     let archetypes: [Archetype]
     
     @Guide(description: "A very brief summary of the dream meaning.")
     let summary: String
     
-    @Guide(description: "A detailed interpretation of the dream, drawing from works like The Archetypes and the Collective Unconscious. Do not define the archetypes here.")
+    @Guide(description: "A detailed interpretation of the dream, drawing from works like The Archetypes and the Collective Unconscious. Do not define the archetypes here. Refrain from stating Carl Jung's name.")
     let description: String
 }
 

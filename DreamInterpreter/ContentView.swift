@@ -47,26 +47,30 @@ struct ContentView: View {
     @ViewBuilder private var detailsView: some View {
         ScrollView(.vertical, showsIndicators: false) {
             VStack(alignment: .leading, spacing: 16) {
+                if let title = viewModel.dream?.title {
+                    Text(title).font(.headline)
+                }
+                
                 if let summary = viewModel.dream?.summary {
                     VStack(alignment: .leading) {
-                        Text("Summary").font(.caption).bold()
-                        Text(summary).foregroundStyle(Color(.darkGray))
+                        Text("Summary").font(.caption).bold().foregroundStyle(.secondary)
+                        Text(summary)
                     }
                 }
                 
                 if let archetypes = viewModel.dream?.archetypes {
                     ForEach(archetypes) { archetype in
                         VStack(alignment: .leading) {
-                            Text(archetype.name).font(.caption).bold()
-                            Text(archetype.dreamCounterpart).foregroundStyle(Color(.darkGray))
+                            Text(archetype.name).font(.caption).bold().foregroundStyle(.secondary)
+                            Text(archetype.dreamCounterpart)
                         }
                     }
                 }
                 
                 if let interpretation = viewModel.dream?.description {
                     VStack(alignment: .leading) {
-                        Text("Interpretation").font(.caption).bold()
-                        Text(interpretation).foregroundStyle(Color(.darkGray))
+                        Text("Interpretation").font(.caption).bold().foregroundStyle(.secondary)
+                        Text(interpretation)
                     }
                 }
             }
