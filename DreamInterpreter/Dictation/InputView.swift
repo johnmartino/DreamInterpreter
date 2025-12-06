@@ -13,11 +13,9 @@ struct InputView: View {
     @FocusState private var isFocused
     private var cornerRadius: CGFloat = 24
     
-    let borderColor: Color
     let completion: (String) -> Void
     
-    init(borderColor: Color = .clear, completion: @escaping (String) -> Void) {
-        self.borderColor = borderColor
+    init(completion: @escaping (String) -> Void) {
         self.completion = completion
     }
     
@@ -78,19 +76,14 @@ struct InputView: View {
             }
         }
         .padding(8)
-        .glassEffect(.clear, in: .rect(cornerRadius: cornerRadius))
-        .overlay(
-            RoundedRectangle(cornerRadius: cornerRadius)
-                .stroke(.secondary, lineWidth: 1)
-        )
-        .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+        .glassEffect(.regular.tint(Color(.systemBackground).opacity(0.35)), in: .rect(cornerRadius: cornerRadius))
     }
 }
 
 #Preview {
     ZStack {
         Color.yellow.ignoresSafeArea()
-        InputView(borderColor: .gray) { _ in }
+        InputView { _ in }
             .padding()
     }
 }

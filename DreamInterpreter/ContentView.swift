@@ -16,6 +16,15 @@ struct ContentView: View {
             contentView
                 .navigationTitle("Dream Interpreter")
                 .toolbarTitleDisplayMode(.inlineLarge)
+                .toolbar {
+                    ToolbarItem(placement: .primaryAction) {
+                        Button {
+                            viewModel.dream = nil
+                        } label: {
+                            Image(systemName: "eraser")
+                        }
+                    }
+                }
         }
     }
     
@@ -26,7 +35,7 @@ struct ContentView: View {
         } else {
             interpretationView
                 .safeAreaInset(edge: .bottom) {
-                    InputView(borderColor: .gray) { text in send(text) }
+                    InputView { text in send(text) }
                         .disabled(viewModel.isQuerying)
                         .padding(8)
                 }
@@ -39,39 +48,35 @@ struct ContentView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
         } else if let message = viewModel.errorMessage {
             ContentUnavailableView(message, systemImage: "apple.intelligence")
+                .foregroundStyle(.secondary)
+        } else if let dream = viewModel.dream {
+            detailsView(dream: dream)
         } else {
-            detailsView
+            ContentUnavailableView("Describe your dream", systemImage: "person.icloud")
+                .foregroundStyle(.secondary)
         }
     }
     
-    @ViewBuilder private var detailsView: some View {
+    @ViewBuilder private func detailsView(dream: Dream) -> some View {
         ScrollView(.vertical, showsIndicators: false) {
             VStack(alignment: .leading, spacing: 16) {
-                if let title = viewModel.dream?.title {
-                    Text(title).font(.headline)
+                Text(dream.title).font(.headline)
+                
+                VStack(alignment: .leading) {
+                    Text("Summary").font(.caption).bold().foregroundStyle(.secondary)
+                    Text(dream.summary)
                 }
                 
-                if let summary = viewModel.dream?.summary {
+                ForEach(dream.archetypes) { archetype in
                     VStack(alignment: .leading) {
-                        Text("Summary").font(.caption).bold().foregroundStyle(.secondary)
-                        Text(summary)
+                        Text(archetype.name).font(.caption).bold().foregroundStyle(.secondary)
+                        Text(archetype.dreamCounterpart)
                     }
                 }
                 
-                if let archetypes = viewModel.dream?.archetypes {
-                    ForEach(archetypes) { archetype in
-                        VStack(alignment: .leading) {
-                            Text(archetype.name).font(.caption).bold().foregroundStyle(.secondary)
-                            Text(archetype.dreamCounterpart)
-                        }
-                    }
-                }
-                
-                if let interpretation = viewModel.dream?.description {
-                    VStack(alignment: .leading) {
-                        Text("Interpretation").font(.caption).bold().foregroundStyle(.secondary)
-                        Text(interpretation)
-                    }
+                VStack(alignment: .leading) {
+                    Text("Interpretation").font(.caption).bold().foregroundStyle(.secondary)
+                    Text(dream.description)
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
