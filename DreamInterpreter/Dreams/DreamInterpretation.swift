@@ -19,4 +19,31 @@ class DreamInterpretation {
         self.dreamDescription = description
         self.dream = dream
     }
+    
+    var shareText: String {
+        let archetypeList: String = {
+            let items = dream.archetypes.map { "- \($0.description)" }
+            if items.isEmpty {
+                return "- None"
+            } else {
+                return items.joined(separator: "\n")
+            }
+        }()
+        
+        return """
+        \(dream.title)
+        
+        Summary:
+        \(dream.summary)
+        
+        Archetypes:
+        \(archetypeList)
+        
+        Interpretation:
+        \(dream.interpretation)
+        
+        Original Description:
+        \(dreamDescription)
+        """
+    }
 }

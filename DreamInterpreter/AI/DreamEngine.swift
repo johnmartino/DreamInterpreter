@@ -30,6 +30,10 @@ struct Archetype: ConvertibleFromGeneratedContent, Identifiable, Codable {
 
     @Guide(description: "The dream counterpart or symbol for this archetype.")
     let dreamCounterpart: String
+    
+    var description: String {
+        "\(name): \(dreamCounterpart)"
+    }
 }
 
 @Generable

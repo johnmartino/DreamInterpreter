@@ -1,0 +1,234 @@
+{
+    "categories": [
+        {
+            "name": "Primary Archetypes",
+            "archetypes": [
+                {
+                    "name": "The Self",
+                    "description": "Symbol of wholeness, unity, and the true inner self."
+                },
+                {
+                    "name": "The Shadow",
+                    "description": "Repressed traits, fears, impulses, or the darker side of the psyche."
+                },
+                {
+                    "name": "The Persona",
+                    "description": "The social mask or outward identity presented to others."
+                },
+                {
+                    "name": "The Anima",
+                    "description": "Feminine qualities within a man, connected to emotion and intuition."
+                },
+                {
+                    "name": "The Animus",
+                    "description": "Masculine qualities within a woman, connected to logic and decisiveness."
+                }
+            ]
+        },
+        {
+            "name": "Character and Figure Archetypes",
+            "archetypes": [
+                {
+                    "name": "The Hero",
+                    "description": "The part of the psyche that seeks to overcome conflict and grow."
+                },
+                {
+                    "name": "The Maiden",
+                    "description": "Innocence, renewal, and vulnerable emerging aspects of the self."
+                },
+                {
+                    "name": "The Wise Old Man",
+                    "description": "Guidance, insight, and higher knowledge."
+                },
+                {
+                    "name": "The Wise Old Woman",
+                    "description": "Intuition, deep knowing, and ancient feminine wisdom."
+                },
+                {
+                    "name": "The Great Mother",
+                    "description": "Nurturing support or overwhelming emotional force."
+                },
+                {
+                    "name": "The Terrible Mother",
+                    "description": "Destructive, chaotic, or engulfing feminine force."
+                },
+                {
+                    "name": "The Father",
+                    "description": "Authority, structure, discipline, and inner rules."
+                },
+                {
+                    "name": "The Trickster",
+                    "description": "Disruption, mischief, and rule-breaking energy."
+                },
+                {
+                    "name": "The Child",
+                    "description": "Potential, rebirth, and vulnerability."
+                },
+                {
+                    "name": "The Heroine",
+                    "description": "A feminine journey of transformation and individuation."
+                },
+                {
+                    "name": "The Warrior",
+                    "description": "Assertiveness, boundaries, and protective strength."
+                },
+                {
+                    "name": "The King",
+                    "description": "Order, leadership, and authority—wise or tyrannical."
+                },
+                {
+                    "name": "The Queen",
+                    "description": "Emotional sovereignty, maturity, and responsibility."
+                },
+                {
+                    "name": "The Healer",
+                    "description": "Restoration and transformation through suffering."
+                },
+                {
+                    "name": "The Stranger",
+                    "description": "Unknown or emerging aspects of the self."
+                },
+                {
+                    "name": "The Doppelgänger",
+                    "description": "A split self or unintegrated psychological traits."
+                },
+                {
+                    "name": "The Eternal Boy (Puer Aeternus)",
+                    "description": "Youthful potential mixed with avoidance of responsibility."
+                },
+                {
+                    "name": "The Eternal Girl (Puella Aeterna)",
+                    "description": "Dreamy, fragile femininity resisting grounded maturity."
+                },
+                {
+                    "name": "The Senex",
+                    "description": "Rigid control, inhibition, and over-structuring."
+                },
+                {
+                    "name": "The Animus Figure",
+                    "description": "Logical, forceful, or critical masculine presence in women's dreams."
+                },
+                {
+                    "name": "The Anima Figure",
+                    "description": "Emotional, romantic, or intuitive feminine presence in men's dreams."
+                }
+            ]
+        },
+        {
+            "name": "Animal Archetypes",
+            "archetypes": [
+                {
+                    "name": "Predator Animal",
+                    "description": "Threatening force representing fear or repressed aggression."
+                },
+                {
+                    "name": "Companion Animal",
+                    "description": "Instinct, intuition, and loyalty."
+                },
+                {
+                    "name": "Serpent",
+                    "description": "Transformation, danger, or hidden wisdom."
+                },
+                {
+                    "name": "Bird",
+                    "description": "Perspective, transcendence, or messages from the unconscious."
+                },
+                {
+                    "name": "Monster or Beast",
+                    "description": "Primordial fear or denied emotional material."
+                },
+                {
+                    "name": "Horse",
+                    "description": "Vital energy, drive, and unconscious power."
+                }
+            ]
+        },
+        {
+            "name": "Situational Archetypes",
+            "archetypes": [
+                {
+                    "name": "The Underworld",
+                    "description": "The deep unconscious, trauma, or hidden truths."
+                },
+                {
+                    "name": "The House",
+                    "description": "The psyche itself; its rooms reflect different aspects of the self."
+                },
+                {
+                    "name": "The Forest",
+                    "description": "Mystery, confusion, or entering the unconscious."
+                },
+                {
+                    "name": "The Ocean",
+                    "description": "Vast emotions, overwhelm, or the collective unconscious."
+                },
+                {
+                    "name": "The Mountain",
+                    "description": "Challenge, aspiration, or spiritual growth."
+                },
+                {
+                    "name": "The Bridge",
+                    "description": "Transition between psychological states or life phases."
+                },
+                {
+                    "name": "The Road",
+                    "description": "Life direction, purpose, and movement."
+                }
+            ]
+        },
+        {
+            "name": "Object and Symbol Archetypes",
+            "archetypes": [
+                {
+                    "name": "The Key",
+                    "description": "Access to knowledge or new psychological territory."
+                },
+                {
+                    "name": "The Weapon",
+                    "description": "Power, agency, or protection."
+                },
+                {
+                    "name": "The Mask",
+                    "description": "Hidden identity or false self."
+                },
+                {
+                    "name": "The Mirror",
+                    "description": "Self-reflection, truth, or identity confrontation."
+                },
+                {
+                    "name": "The Door or Gate",
+                    "description": "Opportunity, boundaries, or transition into the unconscious."
+                }
+            ]
+        },
+        {
+            "name": "Relational and Dynamic Archetypes",
+            "archetypes": [
+                {
+                    "name": "The Pursuer",
+                    "description": "Repressed content or conflict chasing integration."
+                },
+                {
+                    "name": "The Victim",
+                    "description": "Inner helplessness or lack of power."
+                },
+                {
+                    "name": "The Rescuer",
+                    "description": "Overcompensation, savior tendencies, or inner protection."
+                },
+                {
+                    "name": "The Seducer or Temptress",
+                    "description": "Desire, fantasy, or risky emotional pull."
+                },
+                {
+                    "name": "The Destroyer",
+                    "description": "Endings, ego death, or necessary transformation."
+                },
+                {
+                    "name": "The Creator",
+                    "description": "Imagination, problem-solving, and generative energy."
+                }
+            ]
+        }
+    ]
+}

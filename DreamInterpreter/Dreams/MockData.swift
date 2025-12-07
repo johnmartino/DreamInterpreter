@@ -43,3 +43,20 @@ struct MockData: PreviewModifier {
 extension PreviewTrait where T == Preview.ViewTraits {
     static var mockData: Self = .modifier(MockData())
 }
+
+
+//// Search the model container for a record by title
+//private func fetchInterpretation(byTitle title: String) -> DreamInterpretation? {
+//    var descriptor = FetchDescriptor<DreamInterpretation>(
+//        predicate: #Predicate { $0.title == title },
+//        sortBy: []
+//    )
+//    descriptor.fetchLimit = 1
+//    do {
+//        let results = try context.fetch(descriptor)
+//        return results.first
+//    } catch {
+//        print("Failed to fetch DreamInterpretation by title: \(error)")
+//        return nil
+//    }
+//}

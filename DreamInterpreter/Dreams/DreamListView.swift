@@ -14,6 +14,8 @@ struct DreamListView: View {
     
     @Query(sort: [SortDescriptor(\DreamInterpretation.timestamp, order: .reverse)]) private var dreams: [DreamInterpretation]
     
+    let didDismiss: () -> Void
+    
     var body: some View {
         NavigationStack {
             Group {
@@ -30,6 +32,7 @@ struct DreamListView: View {
                 ToolbarItem(placement: .cancellationAction) {
                     Button {
                         dismiss()
+                        didDismiss()
                     } label: {
                         Image(systemName: "xmark")
                     }
@@ -73,19 +76,30 @@ struct DreamListView: View {
     
     private func dreamDetailsView(for dream: DreamInterpretation) -> some View {
         ScrollView(.vertical, showsIndicators: false) {
-            DreamView(dream: dream.dream)
-            
-            VStack(alignment: .leading) {
-                Text("Dream Description")
-                    .font(.caption).bold().foregroundStyle(.secondary)
-                Text(dream.dreamDescription)
+            VStack {
+                DreamView(dream: dream.dream)
+                
+                VStack(alignment: .leading) {
+                    Text("Dream Description")
+                        .font(.caption).bold().foregroundStyle(.secondary)
+                    Text(dream.dreamDescription)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding([.horizontal, .top])
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding([.horizontal, .top])
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    ShareLink(item: dream.shareText) {
+                        Image(systemName: "square.and.arrow.up")
+                    }
+                }
+            }
         }
     }
 }
 
 #Preview(traits: .mockData) {
-    DreamListView()
+    DreamListView() {
+        
+    }
 }

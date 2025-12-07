@@ -12,44 +12,39 @@ struct ContentView: View {
     @Environment(\.modelContext) var context
     @StateObject private var service = AIService()
     @StateObject private var viewModel = ContentViewModel()
-    @Query private var interpretations: [DreamInterpretation]
     
     @State private var showDreamHistory = false
+    @State private var showInfo = false
+    @State private var saved = false
     
     var body: some View {
         NavigationStack {
             contentView
-                .navigationTitle("Reve AI")
+                .navigationTitle("Somnify")
                 .toolbarTitleDisplayMode(.inlineLarge)
                 .toolbar {
                     ToolbarItemGroup(placement: .primaryAction) {
-                        if let dream = viewModel.dream {
-                            Button {
-                                viewModel.dream = nil
-                            } label: {
-                                Image(systemName: "eraser")
-                            }
-                            
-                            Button {
-                                let interpretation = DreamInterpretation(description: viewModel.latestDreamText, dream: dream)
-                                context.insert(interpretation)
-                                try? context.save()
-                            } label: {
-                                Image(systemName: "square.and.arrow.down")
-                            }
+                        Button {
+                            showInfo.toggle()
+                        } label: {
+                            Image(systemName: "info")
                         }
                         
-                        if interpretations.count > 0 {
-                            Button {
-                                showDreamHistory.toggle()
-                            } label: {
-                                Image(systemName: "list.bullet")
-                            }
+                        Button {
+                            showDreamHistory.toggle()
+                        } label: {
+                            Image(systemName: "list.bullet")
                         }
                     }
                 }
                 .fullScreenCover(isPresented: $showDreamHistory) {
-                    DreamListView()
+                    DreamListView() {
+                        let interpretation = fetchInterpretation(title: viewModel.dream?.title, dreamDescription: viewModel.latestDreamText)
+                        saved = interpretation != nil
+                    }
+                }
+                .fullScreenCover(isPresented: $showInfo) {
+                    DreamInfoView()
                 }
         }
     }
@@ -85,13 +80,79 @@ struct ContentView: View {
     
     @ViewBuilder private func detailsView(dream: Dream) -> some View {
         ScrollView(.vertical, showsIndicators: false) {
-            DreamView(dream: dream)
+            VStack(alignment: .leading, spacing: 16) {
+                DreamView(dream: dream)
+                actionButtons
+            }
+        }
+    }
+    
+    @ViewBuilder private var actionButtons: some View {
+        if let dream = viewModel.dream {
+            let interpretation = DreamInterpretation(description: viewModel.latestDreamText, dream: dream)
+            
+            HStack {
+                Button {
+                    viewModel.dream = nil
+                } label: {
+                    Label("Clear", systemImage: "trash")
+                        .font(.footnote)
+                        .foregroundStyle(Color(.systemBackground))
+                }
+                .tint(.primary)
+                .buttonStyle(.glassProminent)
+                
+                Button {
+                    context.insert(interpretation)
+                    do {
+                        try context.save()
+                        saved = true
+                    } catch {
+                        print("Failed to save dream: \(error)")
+                    }
+                } label: {
+                    Label("Save", systemImage: "square.and.arrow.down")
+                        .font(.footnote)
+                        .foregroundStyle(Color(.systemBackground))
+                }
+                .tint(.primary)
+                .buttonStyle(.glassProminent)
+                .disabled(saved)
+                
+                Spacer()
+                
+                ShareLink(item: interpretation.shareText) {
+                    Label("Share", systemImage: "square.and.arrow.up")
+                        .font(.footnote)
+                        .foregroundStyle(Color(.systemBackground))
+                }
+                .tint(.primary)
+                .buttonStyle(.glassProminent)
+            }
+            .padding(.horizontal)
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
     
     private func send(_ text: String) {
         Task {
             await viewModel.interpret(dreamText: text)
+        }
+    }
+    
+    private func fetchInterpretation(title: String?, dreamDescription: String) -> DreamInterpretation? {
+        guard let title else { return nil }
+        var descriptor = FetchDescriptor<DreamInterpretation>(
+            predicate: #Predicate { $0.dream.title == title && $0.dreamDescription == dreamDescription },
+            sortBy: []
+        )
+        descriptor.fetchLimit = 1
+        do {
+            let results = try context.fetch(descriptor)
+            return results.first
+        } catch {
+            print("Failed to fetch DreamInterpretation by title: \(error)")
+            return nil
         }
     }
 }

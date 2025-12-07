@@ -13,8 +13,6 @@ struct InputView: View {
     @FocusState private var isFocused
     private var cornerRadius: CGFloat = 24
     
-    @Namespace private var buttonAnimation
-    
     let completion: (String) -> Void
     
     init(completion: @escaping (String) -> Void) {
@@ -77,8 +75,12 @@ struct InputView: View {
                                 )
                             )
                             .onTapGesture {
-                                dreamText = ""
-                                speech.stop()
+                                withAnimation(.snappy) {
+                                    dreamText = ""
+                                }
+                                if speech.isRecording {
+                                    speech.stop()
+                                }
                             }
                     }
                     
@@ -90,6 +92,9 @@ struct InputView: View {
                         .onTapGesture {
                             if !dreamText.isEmpty {
                                 let text = dreamText
+                                if speech.isRecording {
+                                    speech.stop()
+                                }
                                 withAnimation(.snappy) {
                                     dreamText = ""
                                     isFocused = false
@@ -103,6 +108,12 @@ struct InputView: View {
         }
         .padding(8)
         .glassEffect(.regular.tint(Color(.systemBackground).opacity(0.35)), in: .rect(cornerRadius: cornerRadius))
+        .contentShape(Rectangle())
+        .onTapGesture {
+            // Consume tap so it doesn't reach views underneath.
+            // You can also dismiss the keyboard here if desired:
+            // isFocused = false
+        }
     }
     
     private func startTranscribing() {
