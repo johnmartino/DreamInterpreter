@@ -8,16 +8,16 @@
 import SwiftUI
 internal import Combine
 
-let constant = "@tfgQWERTYUIASDFGHJKLZXCVB<>?"
-
 struct MatrixRainView: View {
+    private let constant = "@tfgQWERTYUIASDFGHJKLZXCVB<>?"
+    
     var body: some View {
         GeometryReader { proxy in
             let size = proxy.size
             
             HStack(spacing: 16) {
                 ForEach(1...Int(size.width / 37), id: \.self) { _ in
-                    MatrixRainCharacters(size: size)
+                    MatrixRainCharacters(constant: constant, size: size)
                         .frame(maxHeight: .infinity)
                 }
             }
@@ -30,6 +30,7 @@ struct MatrixRainCharacters: View {
     @State private var startAnimation: Bool = false
     @State private var random: Int = 0
     
+    let constant: String
     let size: CGSize
     
     var body: some View {
@@ -40,7 +41,7 @@ struct MatrixRainCharacters: View {
                 let character = Array(constant)[getRandomIndex(index: index)]
                 Text(String(character))
                     .font(.custom("Astro", size: 25))
-                    .foregroundStyle(.tertiary)
+                    .foregroundStyle(.secondary)
             }
             .frame(maxHeight: .infinity)
         }
