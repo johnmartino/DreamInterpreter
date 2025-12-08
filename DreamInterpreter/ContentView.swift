@@ -17,6 +17,8 @@ struct ContentView: View {
     @State private var showInfo = false
     @State private var saved = false
     
+    @Namespace private var namespace
+    
     var body: some View {
         NavigationStack {
             contentView
@@ -64,17 +66,35 @@ struct ContentView: View {
     }
     
     @ViewBuilder private var interpretationView: some View {
-        if viewModel.isQuerying {
-            ProgressView("Interpreting your dream...")
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-        } else if let message = viewModel.errorMessage {
+        if let message = viewModel.errorMessage {
             ContentUnavailableView(message, systemImage: "apple.intelligence")
                 .foregroundStyle(.secondary)
         } else if let dream = viewModel.dream {
             detailsView(dream: dream)
         } else {
-            MatrixRainView()
-                .ignoresSafeArea()
+            ZStack {
+                MatrixRainView()
+                
+                VStack {
+                    Image(systemName: "person.icloud")
+                        .font(.system(size: 72))
+                        .foregroundStyle(.teal)
+                        .padding(32)
+                        .glassEffect(.clear.tint(.teal.opacity(0.15)), in: .circle)
+                        .glassEffectID("logo", in: namespace)
+                        .glassEffectTransition(.matchedGeometry)
+                    
+                    if viewModel.isQuerying {
+                        Text("Interpreting your dream")
+                            .foregroundStyle(.teal)
+                            .padding()
+                            .glassEffect(.clear.tint(.teal.opacity(0.15)), in: .capsule)
+                            .glassEffectID("query", in: namespace)
+                            .glassEffectTransition(.matchedGeometry)
+                    }
+                }
+            }
+            .ignoresSafeArea()
         }
     }
     

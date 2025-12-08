@@ -19,9 +19,9 @@ class ContentViewModel: ObservableObject {
     @MainActor func interpret(dreamText: String) async {
         latestDreamText = dreamText
         do {
-            isQuerying = true
+            withAnimation { isQuerying = true }
             dream = try await engine.interpret(dream: dreamText)
-            isQuerying = false
+            withAnimation { isQuerying = false }
         } catch {
             errorMessage = error.localizedDescription
             isQuerying = false
