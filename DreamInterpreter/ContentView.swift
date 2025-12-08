@@ -73,8 +73,8 @@ struct ContentView: View {
         } else if let dream = viewModel.dream {
             detailsView(dream: dream)
         } else {
-            ContentUnavailableView("Describe your dream", systemImage: "person.icloud")
-                .foregroundStyle(.secondary)
+            MatrixRainView()
+                .ignoresSafeArea()
         }
     }
     

@@ -7,7 +7,7 @@
 
 
 import SwiftUI
-import Combine
+internal import Combine
 
 class KeyboardObserver: ObservableObject {
     @Published var keyboardIsVisible: Bool = false

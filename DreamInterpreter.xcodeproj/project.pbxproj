@@ -10,9 +10,22 @@
 		DFBE1F622EE272E700A0BD12 /* DreamInterpreter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DreamInterpreter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		DF57EF0B2EE639CF00ACAC3E /* Exceptions for "DreamInterpreter" folder in "DreamInterpreter" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = DFBE1F612EE272E700A0BD12 /* DreamInterpreter */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		DFBE1F642EE272E700A0BD12 /* DreamInterpreter */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				DF57EF0B2EE639CF00ACAC3E /* Exceptions for "DreamInterpreter" folder in "DreamInterpreter" target */,
+			);
 			path = DreamInterpreter;
 			sourceTree = "<group>";
 		};
@@ -256,6 +269,7 @@
 				DEVELOPMENT_TEAM = 9G8T963GM5;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DreamInterpreter/Info.plist;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Transcribes Audio";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Transcribes Audio";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -290,6 +304,7 @@
 				DEVELOPMENT_TEAM = 9G8T963GM5;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DreamInterpreter/Info.plist;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Transcribes Audio";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Transcribes Audio";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

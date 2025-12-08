@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import Combine
+internal import Combine
 
 class ContentViewModel: ObservableObject {
     let engine = DreamEngine()
