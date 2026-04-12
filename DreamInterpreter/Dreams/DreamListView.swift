@@ -74,22 +74,22 @@ struct DreamListView: View {
         .listStyle(.plain)
     }
     
-    private func dreamDetailsView(for dream: DreamInterpretation) -> some View {
+    private func dreamDetailsView(for interpretation: DreamInterpretation) -> some View {
         ScrollView(.vertical, showsIndicators: false) {
             VStack {
-                DreamView(dream: dream.dream)
+                DreamView(dream: interpretation.dream)
                 
                 VStack(alignment: .leading) {
                     Text("Dream Description")
                         .font(.caption).bold().foregroundStyle(.secondary)
-                    Text(dream.dreamDescription)
+                    Text(interpretation.dreamDescription)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding([.horizontal, .top])
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    ShareLink(item: dream.shareText) {
+                    ShareLink(item: interpretation.shareText) {
                         Image(systemName: "square.and.arrow.up")
                     }
                 }

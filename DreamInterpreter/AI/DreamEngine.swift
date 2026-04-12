@@ -35,6 +35,10 @@ struct Archetype: ConvertibleFromGeneratedContent, Identifiable, Codable {
     var description: String {
         "\(name): \(dreamCounterpart)"
     }
+    
+    var record: ArchetypeRecord {
+        ArchetypeRecord(name: name, dreamCounterpart: dreamCounterpart)
+    }
 }
 
 @Generable
@@ -50,4 +54,9 @@ struct Dream: ConvertibleFromGeneratedContent, Codable {
     
     @Guide(description: "A detailed interpretation of the dream, drawing from works like The Archetypes and the Collective Unconscious. Do not define the archetypes here. Refrain from stating Carl Jung's name.")
     let interpretation: String
+    
+    var record: DreamRecord {
+        let archetypeRecords = archetypes.map(\.record)
+        return DreamRecord(title: title, archetypes: archetypeRecords, summary: summary, interpretation: interpretation)
+    }
 }

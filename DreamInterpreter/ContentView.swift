@@ -101,7 +101,7 @@ struct ContentView: View {
     @ViewBuilder private func detailsView(dream: Dream) -> some View {
         ScrollView(.vertical, showsIndicators: false) {
             VStack(alignment: .leading, spacing: 16) {
-                DreamView(dream: dream)
+                DreamView(dream: dream.record)
                 actionButtons
             }
         }
@@ -109,7 +109,6 @@ struct ContentView: View {
     
     @ViewBuilder private var actionButtons: some View {
         if let dream = viewModel.dream {
-            let interpretation = DreamInterpretation(description: viewModel.latestDreamText, dream: dream)
             
             HStack {
                 Button {
@@ -123,8 +122,22 @@ struct ContentView: View {
                 .buttonStyle(.glassProminent)
                 
                 Button {
-                    context.insert(interpretation)
                     do {
+                        let dream = DreamRecord(
+                            title: dream.record.title,
+                            archetypes: dream.record.archetypes.map {
+                                ArchetypeRecord(name: $0.name, dreamCounterpart: $0.dreamCounterpart)
+                            },
+                            summary: dream.record.summary,
+                            interpretation: dream.record.interpretation
+                        )
+
+                        let interpretation = DreamInterpretation(
+                            description: viewModel.latestDreamText,
+                            dream: dream
+                        )
+
+                        context.insert(interpretation)
                         try context.save()
                         saved = true
                     } catch {
@@ -141,7 +154,10 @@ struct ContentView: View {
                 
                 Spacer()
                 
-                ShareLink(item: interpretation.shareText) {
+                ShareLink(item: DreamInterpretation(
+                    description: viewModel.latestDreamText,
+                    dream: dream.record
+                ).shareText) {
                     Label("Share", systemImage: "square.and.arrow.up")
                         .font(.footnote)
                         .foregroundStyle(Color(.systemBackground))

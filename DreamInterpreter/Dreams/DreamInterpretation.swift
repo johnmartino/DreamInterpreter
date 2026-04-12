@@ -9,12 +9,43 @@ import Foundation
 import SwiftData
 
 @Model
-class DreamInterpretation {
-    private(set) var timestamp: Date
-    private(set) var dreamDescription: String
-    private(set) var dream: Dream
+class ArchetypeRecord {
+    var name: String
+    var dreamCounterpart: String
     
-    init(description: String, dream: Dream) {
+    init(name: String, dreamCounterpart: String) {
+        self.name = name
+        self.dreamCounterpart = dreamCounterpart
+    }
+    
+    var description: String {
+        "\(name): \(dreamCounterpart)"
+    }
+}
+
+@Model
+class DreamRecord {
+    var title: String
+    @Relationship(deleteRule: .cascade)
+    var archetypes: [ArchetypeRecord]
+    var summary: String
+    var interpretation: String
+    
+    init(title: String, archetypes: [ArchetypeRecord], summary: String, interpretation: String) {
+        self.title = title
+        self.archetypes = archetypes
+        self.summary = summary
+        self.interpretation = interpretation
+    }
+}
+
+@Model
+class DreamInterpretation {
+    var timestamp: Date
+    var dreamDescription: String
+    var dream: DreamRecord
+    
+    init(description: String, dream: DreamRecord) {
         self.timestamp = Date.now
         self.dreamDescription = description
         self.dream = dream

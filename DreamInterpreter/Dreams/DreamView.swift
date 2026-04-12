@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct DreamView: View {
-    let dream: Dream
+    let dream: DreamRecord
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {

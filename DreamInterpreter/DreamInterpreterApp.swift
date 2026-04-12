@@ -14,6 +14,6 @@ struct DreamInterpreterApp: App {
         WindowGroup {
             ContentView()
         }
-        .modelContainer(for: [DreamInterpretation.self])
+        .modelContainer(for: [DreamInterpretation.self, DreamRecord.self, ArchetypeRecord.self])
     }
 }

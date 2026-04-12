@@ -30,9 +30,9 @@ struct MockData: PreviewModifier {
     }
     
     static var sample: DreamInterpretation {
-        let dream = Dream(
+        let dream = DreamRecord(
             title: "The Third Eye",
-            archetypes: [Archetype(name: "The Shadow", dreamCounterpart: "Lorem ipsum dolor sit amet consectetur adipiscing elit."), Archetype(name: "The Self", dreamCounterpart: "Lorem ipsum dolor sit amet consectetur adipiscing elit.")],
+            archetypes: [ArchetypeRecord(name: "The Shadow", dreamCounterpart: "Lorem ipsum dolor sit amet consectetur adipiscing elit."), ArchetypeRecord(name: "The Self", dreamCounterpart: "Lorem ipsum dolor sit amet consectetur adipiscing elit.")],
             summary: "Lorem ipsum dolor sit amet consectetur adipiscing elit. Dolor sit amet consectetur adipiscing elit quisque faucibus.",
             interpretation: "Lorem ipsum dolor sit amet consectetur adipiscing elit. Ex sapien vitae pellentesque sem placerat in id. Pretium tellus duis convallis tempus leo eu aenean. Urna tempor pulvinar vivamus fringilla lacus nec metus. Iaculis massa nisl malesuada lacinia integer nunc posuere. Semper vel class aptent taciti sociosqu ad litora. Conubia nostra inceptos himenaeos orci varius natoque penatibus. Dis parturient montes nascetur ridiculus mus donec rhoncus. Nulla molestie mattis scelerisque maximus eget fermentum odio. Purus est efficitur laoreet mauris pharetra vestibulum fusce."
         )
