@@ -22,7 +22,7 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             contentView
-                .navigationTitle("Veil")
+                .navigationTitle("Aion")
                 .toolbarTitleDisplayMode(.inlineLarge)
                 .toolbar {
                     ToolbarItemGroup(placement: .primaryAction) {
