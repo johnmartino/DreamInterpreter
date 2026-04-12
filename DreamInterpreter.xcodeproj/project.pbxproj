@@ -273,7 +273,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DreamInterpreter/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Aion;
+				INFOPLIST_KEY_CFBundleDisplayName = "Dream Anima";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Transcribes Audio";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Transcribes Audio";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -312,7 +312,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DreamInterpreter/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Aion;
+				INFOPLIST_KEY_CFBundleDisplayName = "Dream Anima";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Transcribes Audio";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Transcribes Audio";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
