@@ -75,10 +75,11 @@ struct ContentView: View {
         } else {
             ZStack {
                 MatrixRainView()
-                
+                    .ignoresSafeArea()
+
                 VStack(spacing: 32) {
                     CrystalBallView(diameter: 150, coolColor: .teal, hotColor: colorScheme == .dark ? .black : .white)
-                    
+
                     if viewModel.isQuerying {
                         Text("Interpreting your dream")
                             .foregroundStyle(.teal)
@@ -89,7 +90,6 @@ struct ContentView: View {
                     }
                 }
             }
-            .ignoresSafeArea()
         }
     }
     
