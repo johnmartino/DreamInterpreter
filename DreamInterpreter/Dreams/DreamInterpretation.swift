@@ -43,6 +43,7 @@ class DreamRecord {
 class DreamInterpretation {
     var timestamp: Date
     var dreamDescription: String
+    @Relationship(deleteRule: .cascade)
     var dream: DreamRecord
     
     init(description: String, dream: DreamRecord) {
