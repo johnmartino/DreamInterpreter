@@ -10,6 +10,7 @@ import SwiftData
 
 struct ContentView: View {
     @Environment(\.modelContext) var context
+    @Environment(\.colorScheme) var colorScheme
     @StateObject private var service = AIService()
     @StateObject private var viewModel = ContentViewModel()
     
@@ -75,14 +76,8 @@ struct ContentView: View {
             ZStack {
                 MatrixRainView()
                 
-                VStack {
-                    Image(systemName: "person.icloud")
-                        .font(.system(size: 72))
-                        .foregroundStyle(.teal)
-                        .padding(32)
-                        .glassEffect(.clear.tint(.teal.opacity(0.15)), in: .circle)
-                        .glassEffectID("logo", in: namespace)
-                        .glassEffectTransition(.matchedGeometry)
+                VStack(spacing: 32) {
+                    CrystalBallView(diameter: 150, coolColor: .teal, hotColor: colorScheme == .dark ? .black : .white)
                     
                     if viewModel.isQuerying {
                         Text("Interpreting your dream")

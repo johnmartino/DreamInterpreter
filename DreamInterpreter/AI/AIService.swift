@@ -15,7 +15,7 @@ final class AIService: ObservableObject {
     @Published var specialMessage: String?
     
     private var model = SystemLanguageModel.default
-    private let options = GenerationOptions(sampling: .greedy, temperature: 2.0)
+    private let options = GenerationOptions(samplingMode: .greedy, temperature: 2.0)
     private let session: LanguageModelSession
     
     init() {
