@@ -17,6 +17,7 @@ struct ContentView: View {
     @State private var showDreamHistory = false
     @State private var showInfo = false
     @State private var saved = false
+    @State private var saveError: String?
     
     @Namespace private var namespace
     
@@ -48,6 +49,14 @@ struct ContentView: View {
                 }
                 .fullScreenCover(isPresented: $showInfo) {
                     DreamInfoView()
+                }
+                .alert("Save Failed", isPresented: Binding(
+                    get: { saveError != nil },
+                    set: { if !$0 { saveError = nil } }
+                )) {
+                    Button("OK", role: .cancel) { saveError = nil }
+                } message: {
+                    Text(saveError ?? "The dream could not be saved.")
                 }
         }
     }
@@ -117,27 +126,7 @@ struct ContentView: View {
                 .buttonStyle(.glassProminent)
                 
                 Button {
-                    do {
-                        let dream = DreamRecord(
-                            title: dream.record.title,
-                            archetypes: dream.record.archetypes.map {
-                                ArchetypeRecord(name: $0.name, dreamCounterpart: $0.dreamCounterpart)
-                            },
-                            summary: dream.record.summary,
-                            interpretation: dream.record.interpretation
-                        )
-
-                        let interpretation = DreamInterpretation(
-                            description: viewModel.latestDreamText,
-                            dream: dream
-                        )
-
-                        context.insert(interpretation)
-                        try context.save()
-                        saved = true
-                    } catch {
-                        print("Failed to save dream: \(error)")
-                    }
+                    save(dream)
                 } label: {
                     Label("Save", systemImage: "square.and.arrow.down")
                         .font(.footnote)
@@ -149,10 +138,7 @@ struct ContentView: View {
                 
                 Spacer()
                 
-                ShareLink(item: DreamInterpretation(
-                    description: viewModel.latestDreamText,
-                    dream: dream.record
-                ).shareText) {
+                ShareLink(item: dream.shareText(dreamDescription: viewModel.latestDreamText)) {
                     Label("Share", systemImage: "square.and.arrow.up")
                         .font(.footnote)
                         .foregroundStyle(Color(.systemBackground))
@@ -166,8 +152,25 @@ struct ContentView: View {
     }
     
     private func send(_ text: String) {
+        saved = false
+        saveError = nil
         Task {
             await viewModel.interpret(dreamText: text)
+        }
+    }
+
+    private func save(_ dream: Dream) {
+        do {
+            let interpretation = DreamInterpretation(
+                description: viewModel.latestDreamText,
+                dream: dream.record
+            )
+            context.insert(interpretation)
+            try context.save()
+            saved = true
+        } catch {
+            context.rollback()
+            saveError = error.localizedDescription
         }
     }
     

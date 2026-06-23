@@ -59,4 +59,26 @@ struct Dream: ConvertibleFromGeneratedContent, Codable {
         let archetypeRecords = archetypes.map(\.record)
         return DreamRecord(title: title, archetypes: archetypeRecords, summary: summary, interpretation: interpretation)
     }
+
+    func shareText(dreamDescription: String) -> String {
+        let archetypeList: String = {
+            let items = archetypes.map { "- \($0.description)" }
+            return items.isEmpty ? "- None" : items.joined(separator: "\n")
+        }()
+        return """
+        \(title)
+
+        Summary:
+        \(summary)
+
+        Archetypes:
+        \(archetypeList)
+
+        Interpretation:
+        \(interpretation)
+
+        Original Description:
+        \(dreamDescription)
+        """
+    }
 }
