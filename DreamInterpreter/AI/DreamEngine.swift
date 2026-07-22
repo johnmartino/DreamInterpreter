@@ -10,16 +10,27 @@ import FoundationModels
 
 class DreamEngine {
     func interpret(dream: String) async throws -> Dream {
-        let session = LanguageModelSession(instructions: Instructions {
+        let response = try await self.session.respond(to: dream, generating: Dream.self)
+        return response.content
+    }
+    
+    private lazy var session: LanguageModelSession = {
+        let Instructions = Instructions {
             "You are a dream interpreter."
             "You will analyze a dream description and provide an interpretation based on the works of Carl Jung and also a spiritual / mystical perspective."
             "Specifically, draw from the following works: Psychological Types, The Archetypes and the Collective Unconsioous, and Man and His Symbols."
             "Your tone should be warm and amiable."
             "Don't use Carl Jung's name or words like Jungian in the text."
-        })
-        let response = try await session.respond(to: dream, generating: Dream.self)
-        return response.content
-    }
+        }
+        
+        if #available(iOS 27.0, macOS 27.0, *) {
+            let privateCloudModel = PrivateCloudComputeLanguageModel()
+            let model: any LanguageModel = privateCloudModel.isAvailable ? privateCloudModel : SystemLanguageModel.default
+            return LanguageModelSession(model: model, instructions: Instructions)
+        } else {
+            return LanguageModelSession(instructions: Instructions)
+        }
+    }()
 }
 
 @Generable
