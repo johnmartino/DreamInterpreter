@@ -14,9 +14,10 @@ struct MatrixRainView: View {
     var body: some View {
         GeometryReader { proxy in
             let size = proxy.size
+            let columnCount = max(0, Int(size.width / 37))
             
             HStack(spacing: 16) {
-                ForEach(1...Int(size.width / 37), id: \.self) { _ in
+                ForEach(0..<columnCount, id: \.self) { _ in
                     MatrixRainCharacters(constant: constant, size: size)
                         .frame(maxHeight: .infinity)
                 }

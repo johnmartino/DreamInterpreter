@@ -53,7 +53,9 @@ struct Archetype: ConvertibleFromGeneratedContent, Identifiable, Codable {
 }
 
 @Generable
-struct Dream: ConvertibleFromGeneratedContent, Codable {
+struct Dream: ConvertibleFromGeneratedContent, Identifiable, Codable {
+    var id: String { title }
+
     @Guide(description: "A title for the dream.")
     let title: String
     

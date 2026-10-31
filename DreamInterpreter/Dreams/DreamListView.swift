@@ -11,13 +11,14 @@ import SwiftData
 struct DreamListView: View {
     @Environment(\.modelContext) var context
     @Environment(\.dismiss) var dismiss
+    @State private var selectedDream: DreamInterpretation?
     
     @Query(sort: [SortDescriptor(\DreamInterpretation.timestamp, order: .reverse)]) private var dreams: [DreamInterpretation]
     
     let didDismiss: () -> Void
     
     var body: some View {
-        NavigationStack {
+        NavigationSplitView {
             Group {
                 if dreams.isEmpty {
                     ContentUnavailableView("No saved dreams", systemImage: "person.icloud")
@@ -38,15 +39,22 @@ struct DreamListView: View {
                     }
                 }
             }
+        } detail: {
+            if let selectedDream {
+                dreamDetailsView(for: selectedDream)
+            } else {
+                Text("Select a dream to view its interpretation.")
+                    .font(.headline)
+                    .padding(.horizontal)
+                    .foregroundStyle(.secondary)
+            }
         }
     }
     
     private var dreamsView: some View {
-        List {
+        List(selection: $selectedDream) {
             ForEach(dreams) { dream in
-                NavigationLink {
-                    dreamDetailsView(for: dream)
-                } label: {
+                NavigationLink(value: dream) {
                     VStack(alignment: .leading) {
                         Text(dream.timestamp.dateStamp)
                             .font(.caption).bold()
@@ -62,6 +70,9 @@ struct DreamListView: View {
                 .swipeActions(edge: .trailing) {
                     Button(role: .destructive) {
                         withAnimation {
+                            if selectedDream == dream {
+                                selectedDream = nil
+                            }
                             context.delete(dream)
                             try? context.save()
                         }

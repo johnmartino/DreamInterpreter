@@ -9,8 +9,9 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
-    @Environment(\.modelContext) var context
-    @Environment(\.colorScheme) var colorScheme
+    @Environment(\.modelContext) private var context
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @StateObject private var service = AIService()
     @StateObject private var viewModel = ContentViewModel()
     
@@ -50,6 +51,11 @@ struct ContentView: View {
                 .fullScreenCover(isPresented: $showInfo) {
                     DreamInfoView()
                 }
+                .sheet(item: $viewModel.dream) { dream in
+                    NavigationStack {
+                        detailsView(dream: dream)
+                    }
+                }
                 .alert("Save Failed", isPresented: Binding(
                     get: { saveError != nil },
                     set: { if !$0 { saveError = nil } }
@@ -67,11 +73,6 @@ struct ContentView: View {
             ContentUnavailableView("Language Model", systemImage: "apple.intelligence", description: Text(reason ?? "Unexpected error occurred."))
         } else {
             interpretationView
-                .safeAreaInset(edge: .bottom) {
-                    InputView { text in send(text) }
-                        .disabled(viewModel.isQuerying)
-                        .padding(8)
-                }
         }
     }
     
@@ -79,75 +80,93 @@ struct ContentView: View {
         if let message = viewModel.errorMessage {
             ContentUnavailableView(message, systemImage: "apple.intelligence")
                 .foregroundStyle(.secondary)
-        } else if let dream = viewModel.dream {
-            detailsView(dream: dream)
         } else {
             ZStack {
                 MatrixRainView()
                     .ignoresSafeArea()
 
-                VStack(spacing: 32) {
-                    CrystalBallView(diameter: 150, coolColor: .teal, hotColor: colorScheme == .dark ? .black : .white)
-
-                    if viewModel.isQuerying {
-                        Text("Interpreting your dream")
-                            .foregroundStyle(.teal)
-                            .padding()
-                            .glassEffect(.clear.tint(.teal.opacity(0.15)), in: .capsule)
-                            .glassEffectID("query", in: namespace)
-                            .glassEffectTransition(.matchedGeometry)
+                if #available(iOS 27.1, *), horizontalSizeClass == .regular {
+                    ArrangementView {
+                        CrystalBallView(diameter: 150, coolColor: .teal, hotColor: colorScheme == .dark ? .black : .white)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                    } secondary: {
+                        interpretingDreamTextView
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .safeAreaInset(edge: .bottom) {
+                                dreamInputView
+                            }
+                    }
+                } else {
+                    VStack(spacing: 32) {
+                        CrystalBallView(diameter: 150, coolColor: .teal, hotColor: colorScheme == .dark ? .black : .white)
+                        interpretingDreamTextView
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .safeAreaInset(edge: .bottom) {
+                        dreamInputView
                     }
                 }
             }
         }
     }
     
-    @ViewBuilder private func detailsView(dream: Dream) -> some View {
-        ScrollView(.vertical, showsIndicators: false) {
-            VStack(alignment: .leading, spacing: 16) {
-                DreamView(dream: dream.record)
-                actionButtons
+    private var dreamInputView: some View {
+        InputView { text in send(text) }
+            .disabled(viewModel.isQuerying)
+            .padding(8)
+    }
+
+    @ViewBuilder private var interpretingDreamTextView: some View {
+        ZStack {
+            Color.clear
+                .frame(width: 0, height: 0)
+
+            if viewModel.isQuerying {
+                Text("Interpreting your dream")
+                    .foregroundStyle(.teal)
+                    .padding()
+                    .glassEffect(.clear.tint(.teal.opacity(0.15)), in: .capsule)
+                    .glassEffectID("query", in: namespace)
+                    .glassEffectTransition(.matchedGeometry)
             }
         }
     }
+
+    @ViewBuilder private func detailsView(dream: Dream) -> some View {
+        ScrollView(.vertical, showsIndicators: false) {
+            DreamView(dream: dream.record)
+        }
+        .toolbar {
+            actionButtons
+        }
+    }
     
-    @ViewBuilder private var actionButtons: some View {
+    @ToolbarContentBuilder private var actionButtons: some ToolbarContent {
         if let dream = viewModel.dream {
-            
-            HStack {
+            ToolbarItem(placement: .cancellationAction) {
                 Button {
                     viewModel.dream = nil
                 } label: {
-                    Label("Clear", systemImage: "trash")
-                        .font(.footnote)
-                        .foregroundStyle(Color(.systemBackground))
+                    Label("Clear", systemImage: "xmark")
                 }
-                .tint(.primary)
-                .buttonStyle(.glassProminent)
-                
-                Button {
-                    save(dream)
-                } label: {
-                    Label("Save", systemImage: "square.and.arrow.down")
-                        .font(.footnote)
-                        .foregroundStyle(Color(.systemBackground))
-                }
-                .tint(.primary)
-                .buttonStyle(.glassProminent)
-                .disabled(saved)
-                
-                Spacer()
-                
-                ShareLink(item: dream.shareText(dreamDescription: viewModel.latestDreamText)) {
-                    Label("Share", systemImage: "square.and.arrow.up")
-                        .font(.footnote)
-                        .foregroundStyle(Color(.systemBackground))
-                }
-                .tint(.primary)
-                .buttonStyle(.glassProminent)
             }
-            .padding(.horizontal)
-            .frame(maxWidth: .infinity, alignment: .leading)
+            
+            ToolbarItemGroup(placement: .primaryAction) {
+                Group {
+                    Button {
+                        save(dream)
+                        viewModel.dream = nil
+                    } label: {
+                        Label("Save", systemImage: "checkmark")
+                    }
+                    .disabled(saved)
+                    
+                    ShareLink(item: dream.shareText(dreamDescription: viewModel.latestDreamText)) {
+                        Label("Share", systemImage: "square.and.arrow.up")
+                            .font(.footnote)
+                    }
+                }
+            }
         }
     }
     

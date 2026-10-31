@@ -15,16 +15,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="launch.png" translatesAutoresizingMaskIntoConstraints="NO" id="bDz-Ye-GrE">
-                                <rect key="frame" x="-315.66666666666669" y="-317" width="1024.3333333333333" height="1536"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" image="launch.png" translatesAutoresizingMaskIntoConstraints="NO" id="bDz-Ye-GrE">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Bcu-3y-fUS"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="bDz-Ye-GrE" firstAttribute="centerY" secondItem="Bcu-3y-fUS" secondAttribute="centerY" id="PcR-o4-I0V"/>
-                            <constraint firstItem="bDz-Ye-GrE" firstAttribute="centerX" secondItem="Bcu-3y-fUS" secondAttribute="centerX" id="XNr-tJ-Zgw"/>
-                            <constraint firstItem="bDz-Ye-GrE" firstAttribute="width" secondItem="Ze5-6b-2t3" secondAttribute="height" multiplier="256:213" id="e8J-Rt-w5M"/>
+                            <constraint firstItem="bDz-Ye-GrE" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="PcR-o4-I0V"/>
+                            <constraint firstItem="bDz-Ye-GrE" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="XNr-tJ-Zgw"/>
+                            <constraint firstAttribute="trailing" secondItem="bDz-Ye-GrE" secondAttribute="trailing" id="e8J-Rt-w5M"/>
+                            <constraint firstAttribute="bottom" secondItem="bDz-Ye-GrE" secondAttribute="bottom" id="qta-uL-Z3C"/>
                         </constraints>
                     </view>
                 </viewController>
