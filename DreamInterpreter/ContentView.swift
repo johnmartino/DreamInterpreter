@@ -91,8 +91,8 @@ struct ContentView: View {
                             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                     } secondary: {
                         interpretingDreamTextView
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .safeAreaInset(edge: .bottom) {
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                            .overlay(alignment: .bottom) {
                                 dreamInputView
                             }
                     }
